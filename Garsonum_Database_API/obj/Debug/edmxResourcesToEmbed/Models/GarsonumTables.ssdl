@@ -1,0 +1,210 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="GarsonumModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012.Azure" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityType Name="Cafe">
+    <Key>
+      <PropertyRef Name="c_id" />
+    </Key>
+    <Property Name="c_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="name" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="email" Type="nvarchar" MaxLength="50" />
+    <Property Name="image" Type="varbinary" MaxLength="50" />
+    <Property Name="qr_id" Type="int" Nullable="false" />
+    <Property Name="info" Type="nvarchar" MaxLength="500" />
+    <Property Name="password" Type="uniqueidentifier" />
+    <Property Name="address" Type="nvarchar" MaxLength="200" />
+  </EntityType>
+  <EntityType Name="Category">
+    <Key>
+      <PropertyRef Name="cat_id" />
+    </Key>
+    <Property Name="cat_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="cat_name" Type="nvarchar" MaxLength="100" />
+    <Property Name="c_id" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Has">
+    <Key>
+      <PropertyRef Name="u_id" />
+      <PropertyRef Name="o_id" />
+      <PropertyRef Name="p_id" />
+    </Key>
+    <Property Name="u_id" Type="int" Nullable="false" />
+    <Property Name="o_id" Type="int" Nullable="false" />
+    <Property Name="p_id" Type="int" Nullable="false" />
+    <Property Name="p_portion" Type="float" />
+    <Property Name="p_amount" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Order">
+    <Key>
+      <PropertyRef Name="o_id" />
+    </Key>
+    <Property Name="o_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="total_price" Type="float" />
+    <Property Name="paid_info" Type="bit" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Product">
+    <Key>
+      <PropertyRef Name="p_id" />
+    </Key>
+    <Property Name="p_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="p_name" Type="nvarchar" MaxLength="50" />
+    <Property Name="description" Type="nvarchar" MaxLength="500" Nullable="false" />
+    <Property Name="p_type" Type="bit" Nullable="false" />
+    <Property Name="price" Type="float" />
+    <Property Name="p_image" Type="nvarchar" MaxLength="100" Nullable="false" />
+    <Property Name="cat_id" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="sysdiagrams">
+    <Key>
+      <PropertyRef Name="diagram_id" />
+    </Key>
+    <Property Name="name" Type="nvarchar" MaxLength="128" Nullable="false" />
+    <Property Name="principal_id" Type="int" Nullable="false" />
+    <Property Name="diagram_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="version" Type="int" />
+    <Property Name="definition" Type="varbinary(max)" />
+  </EntityType>
+  <EntityType Name="Table">
+    <Key>
+      <PropertyRef Name="t_id" />
+    </Key>
+    <Property Name="t_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="t_name" Type="nvarchar" MaxLength="50" />
+    <Property Name="enable" Type="bit" Nullable="false" />
+    <Property Name="type" Type="tinyint" />
+    <Property Name="c_id" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="User">
+    <Key>
+      <PropertyRef Name="u_id" />
+    </Key>
+    <Property Name="u_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="firstname" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="lastname" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="email" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="password" Type="uniqueidentifier" Nullable="false" />
+    <Property Name="city" Type="nvarchar" MaxLength="25" />
+    <Property Name="t_id" Type="int" Nullable="false" />
+  </EntityType>
+  <Association Name="FK_Cafe">
+    <End Role="Cafe" Type="Self.Cafe" Multiplicity="1" />
+    <End Role="Table" Type="Self.Table" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Cafe">
+        <PropertyRef Name="c_id" />
+      </Principal>
+      <Dependent Role="Table">
+        <PropertyRef Name="c_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Cafe1">
+    <End Role="Cafe" Type="Self.Cafe" Multiplicity="1" />
+    <End Role="Category" Type="Self.Category" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Cafe">
+        <PropertyRef Name="c_id" />
+      </Principal>
+      <Dependent Role="Category">
+        <PropertyRef Name="c_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Has_Order">
+    <End Role="Order" Type="Self.Order" Multiplicity="1" />
+    <End Role="Has" Type="Self.Has" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Order">
+        <PropertyRef Name="o_id" />
+      </Principal>
+      <Dependent Role="Has">
+        <PropertyRef Name="o_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Has_Product">
+    <End Role="Product" Type="Self.Product" Multiplicity="1" />
+    <End Role="Has" Type="Self.Has" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Product">
+        <PropertyRef Name="p_id" />
+      </Principal>
+      <Dependent Role="Has">
+        <PropertyRef Name="p_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Has_Product1">
+    <End Role="User" Type="Self.User" Multiplicity="1" />
+    <End Role="Has" Type="Self.Has" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="User">
+        <PropertyRef Name="u_id" />
+      </Principal>
+      <Dependent Role="Has">
+        <PropertyRef Name="u_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Product_Category">
+    <End Role="Category" Type="Self.Category" Multiplicity="1" />
+    <End Role="Product" Type="Self.Product" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Category">
+        <PropertyRef Name="cat_id" />
+      </Principal>
+      <Dependent Role="Product">
+        <PropertyRef Name="cat_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_User_Table">
+    <End Role="Table" Type="Self.Table" Multiplicity="1" />
+    <End Role="User" Type="Self.User" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Table">
+        <PropertyRef Name="t_id" />
+      </Principal>
+      <Dependent Role="User">
+        <PropertyRef Name="t_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="GarsonumModelStoreContainer">
+    <EntitySet Name="Cafe" EntityType="Self.Cafe" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Category" EntityType="Self.Category" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Has" EntityType="Self.Has" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Order" EntityType="Self.Order" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Product" EntityType="Self.Product" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Table" EntityType="Self.Table" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="User" EntityType="Self.User" Schema="dbo" store:Type="Tables" />
+    <AssociationSet Name="FK_Cafe" Association="Self.FK_Cafe">
+      <End Role="Cafe" EntitySet="Cafe" />
+      <End Role="Table" EntitySet="Table" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Cafe1" Association="Self.FK_Cafe1">
+      <End Role="Cafe" EntitySet="Cafe" />
+      <End Role="Category" EntitySet="Category" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Has_Order" Association="Self.FK_Has_Order">
+      <End Role="Order" EntitySet="Order" />
+      <End Role="Has" EntitySet="Has" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Has_Product" Association="Self.FK_Has_Product">
+      <End Role="Product" EntitySet="Product" />
+      <End Role="Has" EntitySet="Has" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Has_Product1" Association="Self.FK_Has_Product1">
+      <End Role="User" EntitySet="User" />
+      <End Role="Has" EntitySet="Has" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Product_Category" Association="Self.FK_Product_Category">
+      <End Role="Category" EntitySet="Category" />
+      <End Role="Product" EntitySet="Product" />
+    </AssociationSet>
+    <AssociationSet Name="FK_User_Table" Association="Self.FK_User_Table">
+      <End Role="Table" EntitySet="Table" />
+      <End Role="User" EntitySet="User" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>

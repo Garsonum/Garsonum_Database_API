@@ -1,0 +1,561 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="GarsonumModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012.Azure" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Cafe">
+          <Key>
+            <PropertyRef Name="c_id" />
+          </Key>
+          <Property Name="c_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="name" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="email" Type="nvarchar" MaxLength="50" />
+          <Property Name="image" Type="varbinary" MaxLength="50" />
+          <Property Name="qr_id" Type="int" Nullable="false" />
+          <Property Name="info" Type="nvarchar" MaxLength="500" />
+          <Property Name="password" Type="uniqueidentifier" />
+          <Property Name="address" Type="nvarchar" MaxLength="200" />
+        </EntityType>
+        <EntityType Name="Category">
+          <Key>
+            <PropertyRef Name="cat_id" />
+          </Key>
+          <Property Name="cat_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="cat_name" Type="nvarchar" MaxLength="100" />
+          <Property Name="c_id" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Has">
+          <Key>
+            <PropertyRef Name="u_id" />
+            <PropertyRef Name="o_id" />
+            <PropertyRef Name="p_id" />
+          </Key>
+          <Property Name="u_id" Type="int" Nullable="false" />
+          <Property Name="o_id" Type="int" Nullable="false" />
+          <Property Name="p_id" Type="int" Nullable="false" />
+          <Property Name="p_portion" Type="float" />
+          <Property Name="p_amount" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Order">
+          <Key>
+            <PropertyRef Name="o_id" />
+          </Key>
+          <Property Name="o_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="total_price" Type="float" />
+          <Property Name="paid_info" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Product">
+          <Key>
+            <PropertyRef Name="p_id" />
+          </Key>
+          <Property Name="p_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="p_name" Type="nvarchar" MaxLength="50" />
+          <Property Name="description" Type="nvarchar" MaxLength="500" Nullable="false" />
+          <Property Name="p_type" Type="bit" Nullable="false" />
+          <Property Name="price" Type="float" />
+          <Property Name="p_image" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="cat_id" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="sysdiagrams">
+          <Key>
+            <PropertyRef Name="diagram_id" />
+          </Key>
+          <Property Name="name" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="principal_id" Type="int" Nullable="false" />
+          <Property Name="diagram_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="version" Type="int" />
+          <Property Name="definition" Type="varbinary(max)" />
+        </EntityType>
+        <EntityType Name="Table">
+          <Key>
+            <PropertyRef Name="t_id" />
+          </Key>
+          <Property Name="t_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="t_name" Type="nvarchar" MaxLength="50" />
+          <Property Name="enable" Type="bit" Nullable="false" />
+          <Property Name="type" Type="tinyint" />
+          <Property Name="c_id" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="User">
+          <Key>
+            <PropertyRef Name="u_id" />
+          </Key>
+          <Property Name="u_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="firstname" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="lastname" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="email" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="password" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="city" Type="nvarchar" MaxLength="25" />
+          <Property Name="t_id" Type="int" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_Cafe">
+          <End Role="Cafe" Type="Self.Cafe" Multiplicity="1" />
+          <End Role="Table" Type="Self.Table" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Cafe">
+              <PropertyRef Name="c_id" />
+            </Principal>
+            <Dependent Role="Table">
+              <PropertyRef Name="c_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Cafe1">
+          <End Role="Cafe" Type="Self.Cafe" Multiplicity="1" />
+          <End Role="Category" Type="Self.Category" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Cafe">
+              <PropertyRef Name="c_id" />
+            </Principal>
+            <Dependent Role="Category">
+              <PropertyRef Name="c_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Has_Order">
+          <End Role="Order" Type="Self.Order" Multiplicity="1" />
+          <End Role="Has" Type="Self.Has" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Order">
+              <PropertyRef Name="o_id" />
+            </Principal>
+            <Dependent Role="Has">
+              <PropertyRef Name="o_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Has_Product">
+          <End Role="Product" Type="Self.Product" Multiplicity="1" />
+          <End Role="Has" Type="Self.Has" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Product">
+              <PropertyRef Name="p_id" />
+            </Principal>
+            <Dependent Role="Has">
+              <PropertyRef Name="p_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Has_Product1">
+          <End Role="User" Type="Self.User" Multiplicity="1" />
+          <End Role="Has" Type="Self.Has" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="u_id" />
+            </Principal>
+            <Dependent Role="Has">
+              <PropertyRef Name="u_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Product_Category">
+          <End Role="Category" Type="Self.Category" Multiplicity="1" />
+          <End Role="Product" Type="Self.Product" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Category">
+              <PropertyRef Name="cat_id" />
+            </Principal>
+            <Dependent Role="Product">
+              <PropertyRef Name="cat_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_User_Table">
+          <End Role="Table" Type="Self.Table" Multiplicity="1" />
+          <End Role="User" Type="Self.User" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Table">
+              <PropertyRef Name="t_id" />
+            </Principal>
+            <Dependent Role="User">
+              <PropertyRef Name="t_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="GarsonumModelStoreContainer">
+          <EntitySet Name="Cafe" EntityType="Self.Cafe" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Category" EntityType="Self.Category" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Has" EntityType="Self.Has" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Order" EntityType="Self.Order" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Product" EntityType="Self.Product" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Table" EntityType="Self.Table" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="User" EntityType="Self.User" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_Cafe" Association="Self.FK_Cafe">
+            <End Role="Cafe" EntitySet="Cafe" />
+            <End Role="Table" EntitySet="Table" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Cafe1" Association="Self.FK_Cafe1">
+            <End Role="Cafe" EntitySet="Cafe" />
+            <End Role="Category" EntitySet="Category" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Has_Order" Association="Self.FK_Has_Order">
+            <End Role="Order" EntitySet="Order" />
+            <End Role="Has" EntitySet="Has" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Has_Product" Association="Self.FK_Has_Product">
+            <End Role="Product" EntitySet="Product" />
+            <End Role="Has" EntitySet="Has" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Has_Product1" Association="Self.FK_Has_Product1">
+            <End Role="User" EntitySet="User" />
+            <End Role="Has" EntitySet="Has" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Product_Category" Association="Self.FK_Product_Category">
+            <End Role="Category" EntitySet="Category" />
+            <End Role="Product" EntitySet="Product" />
+          </AssociationSet>
+          <AssociationSet Name="FK_User_Table" Association="Self.FK_User_Table">
+            <End Role="Table" EntitySet="Table" />
+            <End Role="User" EntitySet="User" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="GarsonumModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Cafe">
+          <Key>
+            <PropertyRef Name="c_id" />
+          </Key>
+          <Property Name="c_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="email" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="image" Type="Binary" MaxLength="50" FixedLength="false" />
+          <Property Name="qr_id" Type="Int32" Nullable="false" />
+          <Property Name="info" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="password" Type="Guid" />
+          <Property Name="address" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Table" Relationship="Self.FK_Cafe" FromRole="Cafe" ToRole="Table" />
+          <NavigationProperty Name="Category" Relationship="Self.FK_Cafe1" FromRole="Cafe" ToRole="Category" />
+        </EntityType>
+        <EntityType Name="Category">
+          <Key>
+            <PropertyRef Name="cat_id" />
+          </Key>
+          <Property Name="cat_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="cat_name" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="c_id" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Cafe" Relationship="Self.FK_Cafe1" FromRole="Category" ToRole="Cafe" />
+          <NavigationProperty Name="Product" Relationship="Self.FK_Product_Category" FromRole="Category" ToRole="Product" />
+        </EntityType>
+        <EntityType Name="Has">
+          <Key>
+            <PropertyRef Name="u_id" />
+            <PropertyRef Name="o_id" />
+            <PropertyRef Name="p_id" />
+          </Key>
+          <Property Name="u_id" Type="Int32" Nullable="false" />
+          <Property Name="o_id" Type="Int32" Nullable="false" />
+          <Property Name="p_id" Type="Int32" Nullable="false" />
+          <Property Name="p_portion" Type="Double" />
+          <Property Name="p_amount" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Order" Relationship="Self.FK_Has_Order" FromRole="Has" ToRole="Order" />
+          <NavigationProperty Name="Product" Relationship="Self.FK_Has_Product" FromRole="Has" ToRole="Product" />
+          <NavigationProperty Name="User" Relationship="Self.FK_Has_Product1" FromRole="Has" ToRole="User" />
+        </EntityType>
+        <EntityType Name="Order">
+          <Key>
+            <PropertyRef Name="o_id" />
+          </Key>
+          <Property Name="o_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="total_price" Type="Double" />
+          <Property Name="paid_info" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="Has" Relationship="Self.FK_Has_Order" FromRole="Order" ToRole="Has" />
+        </EntityType>
+        <EntityType Name="Product">
+          <Key>
+            <PropertyRef Name="p_id" />
+          </Key>
+          <Property Name="p_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="p_name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="description" Type="String" MaxLength="500" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="p_type" Type="Boolean" Nullable="false" />
+          <Property Name="price" Type="Double" />
+          <Property Name="p_image" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="cat_id" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Category" Relationship="Self.FK_Product_Category" FromRole="Product" ToRole="Category" />
+          <NavigationProperty Name="Has" Relationship="Self.FK_Has_Product" FromRole="Product" ToRole="Has" />
+        </EntityType>
+        <EntityType Name="sysdiagrams">
+          <Key>
+            <PropertyRef Name="diagram_id" />
+          </Key>
+          <Property Name="name" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="principal_id" Type="Int32" Nullable="false" />
+          <Property Name="diagram_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="version" Type="Int32" />
+          <Property Name="definition" Type="Binary" MaxLength="Max" FixedLength="false" />
+        </EntityType>
+        <EntityType Name="Table">
+          <Key>
+            <PropertyRef Name="t_id" />
+          </Key>
+          <Property Name="t_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="t_name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="enable" Type="Boolean" Nullable="false" />
+          <Property Name="type" Type="Byte" />
+          <Property Name="c_id" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Cafe" Relationship="Self.FK_Cafe" FromRole="Table" ToRole="Cafe" />
+          <NavigationProperty Name="User" Relationship="Self.FK_User_Table" FromRole="Table" ToRole="User" />
+        </EntityType>
+        <EntityType Name="User">
+          <Key>
+            <PropertyRef Name="u_id" />
+          </Key>
+          <Property Name="u_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="firstname" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="lastname" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="email" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="password" Type="Guid" Nullable="false" />
+          <Property Name="city" Type="String" MaxLength="25" FixedLength="false" Unicode="true" />
+          <Property Name="t_id" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Has" Relationship="Self.FK_Has_Product1" FromRole="User" ToRole="Has" />
+          <NavigationProperty Name="Table" Relationship="Self.FK_User_Table" FromRole="User" ToRole="Table" />
+        </EntityType>
+        <Association Name="FK_Cafe">
+          <End Role="Cafe" Type="Self.Cafe" Multiplicity="1" />
+          <End Role="Table" Type="Self.Table" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Cafe">
+              <PropertyRef Name="c_id" />
+            </Principal>
+            <Dependent Role="Table">
+              <PropertyRef Name="c_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Cafe1">
+          <End Role="Cafe" Type="Self.Cafe" Multiplicity="1" />
+          <End Role="Category" Type="Self.Category" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Cafe">
+              <PropertyRef Name="c_id" />
+            </Principal>
+            <Dependent Role="Category">
+              <PropertyRef Name="c_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Product_Category">
+          <End Role="Category" Type="Self.Category" Multiplicity="1" />
+          <End Role="Product" Type="Self.Product" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Category">
+              <PropertyRef Name="cat_id" />
+            </Principal>
+            <Dependent Role="Product">
+              <PropertyRef Name="cat_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Has_Order">
+          <End Role="Order" Type="Self.Order" Multiplicity="1" />
+          <End Role="Has" Type="Self.Has" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Order">
+              <PropertyRef Name="o_id" />
+            </Principal>
+            <Dependent Role="Has">
+              <PropertyRef Name="o_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Has_Product">
+          <End Role="Product" Type="Self.Product" Multiplicity="1" />
+          <End Role="Has" Type="Self.Has" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Product">
+              <PropertyRef Name="p_id" />
+            </Principal>
+            <Dependent Role="Has">
+              <PropertyRef Name="p_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Has_Product1">
+          <End Role="User" Type="Self.User" Multiplicity="1" />
+          <End Role="Has" Type="Self.Has" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="u_id" />
+            </Principal>
+            <Dependent Role="Has">
+              <PropertyRef Name="u_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_User_Table">
+          <End Role="Table" Type="Self.Table" Multiplicity="1" />
+          <End Role="User" Type="Self.User" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Table">
+              <PropertyRef Name="t_id" />
+            </Principal>
+            <Dependent Role="User">
+              <PropertyRef Name="t_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="GarsonumEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Cafe" EntityType="Self.Cafe" />
+          <EntitySet Name="Category" EntityType="Self.Category" />
+          <EntitySet Name="Has" EntityType="Self.Has" />
+          <EntitySet Name="Order" EntityType="Self.Order" />
+          <EntitySet Name="Product" EntityType="Self.Product" />
+          <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" />
+          <EntitySet Name="Table" EntityType="Self.Table" />
+          <EntitySet Name="User" EntityType="Self.User" />
+          <AssociationSet Name="FK_Cafe" Association="Self.FK_Cafe">
+            <End Role="Cafe" EntitySet="Cafe" />
+            <End Role="Table" EntitySet="Table" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Cafe1" Association="Self.FK_Cafe1">
+            <End Role="Cafe" EntitySet="Cafe" />
+            <End Role="Category" EntitySet="Category" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Product_Category" Association="Self.FK_Product_Category">
+            <End Role="Category" EntitySet="Category" />
+            <End Role="Product" EntitySet="Product" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Has_Order" Association="Self.FK_Has_Order">
+            <End Role="Order" EntitySet="Order" />
+            <End Role="Has" EntitySet="Has" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Has_Product" Association="Self.FK_Has_Product">
+            <End Role="Product" EntitySet="Product" />
+            <End Role="Has" EntitySet="Has" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Has_Product1" Association="Self.FK_Has_Product1">
+            <End Role="User" EntitySet="User" />
+            <End Role="Has" EntitySet="Has" />
+          </AssociationSet>
+          <AssociationSet Name="FK_User_Table" Association="Self.FK_User_Table">
+            <End Role="Table" EntitySet="Table" />
+            <End Role="User" EntitySet="User" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="GarsonumModelStoreContainer" CdmEntityContainer="GarsonumEntities">
+          <EntitySetMapping Name="Cafe">
+            <EntityTypeMapping TypeName="GarsonumModel.Cafe">
+              <MappingFragment StoreEntitySet="Cafe">
+                <ScalarProperty Name="c_id" ColumnName="c_id" />
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="email" ColumnName="email" />
+                <ScalarProperty Name="image" ColumnName="image" />
+                <ScalarProperty Name="qr_id" ColumnName="qr_id" />
+                <ScalarProperty Name="info" ColumnName="info" />
+                <ScalarProperty Name="password" ColumnName="password" />
+                <ScalarProperty Name="address" ColumnName="address" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Category">
+            <EntityTypeMapping TypeName="GarsonumModel.Category">
+              <MappingFragment StoreEntitySet="Category">
+                <ScalarProperty Name="cat_id" ColumnName="cat_id" />
+                <ScalarProperty Name="cat_name" ColumnName="cat_name" />
+                <ScalarProperty Name="c_id" ColumnName="c_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Has">
+            <EntityTypeMapping TypeName="GarsonumModel.Has">
+              <MappingFragment StoreEntitySet="Has">
+                <ScalarProperty Name="u_id" ColumnName="u_id" />
+                <ScalarProperty Name="o_id" ColumnName="o_id" />
+                <ScalarProperty Name="p_id" ColumnName="p_id" />
+                <ScalarProperty Name="p_portion" ColumnName="p_portion" />
+                <ScalarProperty Name="p_amount" ColumnName="p_amount" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Order">
+            <EntityTypeMapping TypeName="GarsonumModel.Order">
+              <MappingFragment StoreEntitySet="Order">
+                <ScalarProperty Name="o_id" ColumnName="o_id" />
+                <ScalarProperty Name="total_price" ColumnName="total_price" />
+                <ScalarProperty Name="paid_info" ColumnName="paid_info" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Product">
+            <EntityTypeMapping TypeName="GarsonumModel.Product">
+              <MappingFragment StoreEntitySet="Product">
+                <ScalarProperty Name="p_id" ColumnName="p_id" />
+                <ScalarProperty Name="p_name" ColumnName="p_name" />
+                <ScalarProperty Name="description" ColumnName="description" />
+                <ScalarProperty Name="p_type" ColumnName="p_type" />
+                <ScalarProperty Name="price" ColumnName="price" />
+                <ScalarProperty Name="p_image" ColumnName="p_image" />
+                <ScalarProperty Name="cat_id" ColumnName="cat_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="sysdiagrams">
+            <EntityTypeMapping TypeName="GarsonumModel.sysdiagrams">
+              <MappingFragment StoreEntitySet="sysdiagrams">
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="principal_id" ColumnName="principal_id" />
+                <ScalarProperty Name="diagram_id" ColumnName="diagram_id" />
+                <ScalarProperty Name="version" ColumnName="version" />
+                <ScalarProperty Name="definition" ColumnName="definition" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Table">
+            <EntityTypeMapping TypeName="GarsonumModel.Table">
+              <MappingFragment StoreEntitySet="Table">
+                <ScalarProperty Name="t_id" ColumnName="t_id" />
+                <ScalarProperty Name="t_name" ColumnName="t_name" />
+                <ScalarProperty Name="enable" ColumnName="enable" />
+                <ScalarProperty Name="type" ColumnName="type" />
+                <ScalarProperty Name="c_id" ColumnName="c_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="User">
+            <EntityTypeMapping TypeName="GarsonumModel.User">
+              <MappingFragment StoreEntitySet="User">
+                <ScalarProperty Name="u_id" ColumnName="u_id" />
+                <ScalarProperty Name="firstname" ColumnName="firstname" />
+                <ScalarProperty Name="lastname" ColumnName="lastname" />
+                <ScalarProperty Name="email" ColumnName="email" />
+                <ScalarProperty Name="password" ColumnName="password" />
+                <ScalarProperty Name="city" ColumnName="city" />
+                <ScalarProperty Name="t_id" ColumnName="t_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
